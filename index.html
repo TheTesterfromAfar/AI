@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="mn" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Хиймэл оюун ухаан — Ирээдүйг бүтээж буй технологи</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+<style>
+/* ===== Өнгө, фонтын нэгдсэн токен ===== */
+:root{--bg:#f3f5f9;--card:#fff;--tx:#101828;--mu:#566074;--ac:#2447ff;--am:#f59e0b;--bd:#d5dbe8;--gr:rgba(36,71,255,.06);--cd:#0d1424}
+[data-theme=dark]{--bg:#0b1220;--card:#121b30;--tx:#e6ebf5;--mu:#9aa6bf;--ac:#7c93ff;--am:#fbbf24;--bd:#26324f;--gr:rgba(124,147,255,.07);--cd:#070c18}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{font-family:Inter,system-ui,"Segoe UI",Arial,sans-serif;color:var(--tx);line-height:1.7;background:var(--bg);background-image:linear-gradient(var(--gr) 1px,transparent 1px),linear-gradient(90deg,var(--gr) 1px,transparent 1px);background-size:32px 32px;transition:background-color .3s,color .3s}
+.w{max-width:1080px;margin:auto;padding:0 20px}
+:focus-visible{outline:3px solid var(--am);outline-offset:2px}
+header{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:2px solid var(--tx)}
+header .w{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-weight:800;letter-spacing:-.02em}.logo b{color:var(--ac)}
+nav{display:flex;gap:20px;align-items:center}nav a{color:var(--mu);text-decoration:none;font-size:.92rem}nav a:hover{color:var(--ac)}
+.btn{display:inline-block;border:2px solid var(--tx);cursor:pointer;font:inherit;font-weight:600;padding:11px 22px;border-radius:8px;background:var(--ac);color:#fff;text-decoration:none;box-shadow:4px 4px 0 var(--tx);transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--tx)}.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--tx)}
+.btn.o{background:var(--card);color:var(--tx)}
+.ic{width:42px;height:42px;border-radius:8px;border:2px solid var(--tx);background:var(--card);cursor:pointer;font-size:1.1rem;color:var(--tx)}
+/* ===== Нүүр ===== */
+.hero{padding:64px 0 48px;display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
+h1{font-size:clamp(2.1rem,6vw,3.8rem);line-height:1.08;font-weight:800;letter-spacing:-.03em}
+.sub{font-size:1.35rem;font-weight:600;color:var(--ac);margin:14px 0}
+.hero p{color:var(--mu);margin-bottom:26px;max-width:52ch}.hero .btn{margin:0 10px 10px 0}
+#net{width:100%;height:auto;background:var(--card);border:2px solid var(--tx);border-radius:12px;box-shadow:6px 6px 0 var(--am)}
+#net line{stroke:var(--ac);opacity:.35;stroke-width:1.3;stroke-dasharray:4 4;animation:dash 3s linear infinite}
+#net circle{fill:var(--card);stroke:var(--tx);stroke-width:2.5;animation:lit 3s ease-in-out infinite}
+@keyframes dash{to{stroke-dashoffset:-16}}
+@keyframes lit{0%,60%,100%{fill:var(--card)}30%{fill:var(--am)}}
+/* ===== Хэсгүүд ===== */
+section{padding:48px 0}
+h2{font-size:clamp(1.5rem,3.5vw,2.1rem);letter-spacing:-.02em;margin-bottom:6px}
+.lead{color:var(--mu);margin-bottom:24px;max-width:65ch}
+h3{font-size:1.15rem;margin-bottom:8px}.mu{color:var(--mu)}
+.card{background:var(--card);border:2px solid var(--tx);border-radius:10px;padding:22px;box-shadow:4px 4px 0 var(--bd);transition:box-shadow .25s,border-color .25s}
+.card:hover{box-shadow:6px 6px 0 var(--ac)}
+.g{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 12px}
+.tabs button{flex:none;font:inherit;font-weight:600;font-size:.9rem;padding:8px 14px;border-radius:8px;border:2px solid var(--tx);background:var(--card);color:var(--tx);cursor:pointer;transition:.2s}
+.tabs button:hover{border-color:var(--ac);color:var(--ac)}.tabs button.on{background:var(--tx);color:var(--bg)}
+.pn{animation:fd .4s}@keyframes fd{from{opacity:0;transform:translateY(8px)}}
+.hi{border-left:4px solid var(--am);padding:8px 14px;margin-top:14px;background:var(--bg)}
+.tl{list-style:none;border-left:3px solid var(--ac);padding-left:18px}.tl li{margin-bottom:10px}.tl b{color:var(--ac);margin-right:6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.chips span{border:2px solid var(--bd);border-radius:20px;padding:2px 12px;font-size:.88rem}
+.pc li{margin:0 0 6px 18px}.ok h3{color:#16a34a}.no h3{color:#dc2626}
+.em{font-size:1.8rem}
+/* ===== Карт ба accordion ===== */
+#cards{align-items:start}
+.acc{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s ease}.acc.open{grid-template-rows:1fr}
+.acc>div{overflow:hidden}.acc dl{margin:16px 0 12px}.acc dt{font-weight:800;color:var(--ac);margin-top:8px}.acc dd{color:var(--mu)}
+.more{margin-top:14px}
+/* ===== Код ===== */
+.cb{background:var(--cd);border-radius:8px;overflow:hidden;margin:12px 0;border:1px solid var(--bd);color:#d6deeb}
+.cbh{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:#1b2540;font-size:.8rem;color:#9fb0d0}
+.mini{font:inherit;font-size:.8rem;margin-left:6px;padding:3px 10px;border-radius:6px;border:1px solid #3a4a75;background:transparent;color:#d6deeb;cursor:pointer}.mini:hover{background:var(--ac)}
+pre{padding:12px;overflow-x:auto;font:.85rem/1.65 "IBM Plex Mono",Consolas,monospace;tab-size:4}
+.ln{display:inline-block;width:2.2em;color:#5d6d94;user-select:none}
+.k{color:#c792ea}.s{color:#c3e88d}.c{color:#7f8fb3;font-style:italic}.n{color:#f78c6c}.f{color:#82aaff}
+.ex{padding:10px 14px 10px 36px;background:#111a30;font-size:.85rem;color:#c5d0e8}.ex li{margin-bottom:4px}.ex[hidden]{display:none}
+/* ===== QR, footer ===== */
+.qrw{display:flex;flex-wrap:wrap;gap:24px;align-items:center}
+#qr{background:#fff;padding:14px;border-radius:8px;border:2px solid var(--tx);min-width:120px;min-height:120px;color:#333;font-size:.85rem}
+.qrw input{width:100%;font:inherit;padding:10px 12px;border-radius:8px;border:2px solid var(--tx);background:var(--bg);color:var(--tx);margin-bottom:12px}
+footer{margin-top:40px;background:var(--cd);color:#c5d0e8;padding:36px 0;text-align:center}
+footer b{color:#fff}footer p{margin:2px 0}.au{margin-top:14px;padding-top:14px;border-top:1px solid #26324f;font-size:.9rem}
+#top{position:fixed;right:18px;bottom:18px;opacity:0;pointer-events:none;transition:.3s;z-index:60}#top.show{opacity:1;pointer-events:auto}
+@media(max-width:760px){.hero{grid-template-columns:1fr;padding-top:36px}nav a{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header><div class="w">
+  <div class="logo">AI<b>.</b>Суурь</div>
+  <nav><a href="#info">Мэдээлэл</a><a href="#topics">Сэдвүүд</a><a href="#code">Код</a><a href="#share">QR</a>
+  <button class="ic" id="theme" aria-label="Гэрэлтэй / бараан горим солих">🌙</button></nav>
+</div></header>
+
+<main class="w">
+<!-- ===== 2. НҮҮР ХЭСЭГ ===== -->
+<div class="hero">
+  <div>
+    <h1>ХИЙМЭЛ ОЮУН УХААН</h1>
+    <div class="sub">Ирээдүйг бүтээж буй технологи</div>
+    <p>Хиймэл оюун ухаан нь компьютерт суралцах, шийдвэр гаргах, хэл ойлгох, дүрс таних чадварыг олгодог технологи юм. Өнөөдөр утасны туслахаас эхлээд үйлдвэрийн робот хүртэл бидний амьдралын бараг бүх салбарт ашиглагдаж байна.</p>
+    <a class="btn" href="#info">Дэлгэрэнгүй үзэх</a><a class="btn o" href="#code">Кодын жишээ</a>
+  </div>
+  <svg id="net" viewBox="0 0 420 340" role="img" aria-label="Мэдрэлийн сүлжээний дүрслэл"></svg>
+</div>
+
+<!-- ===== 3. МЭДЭЭЛЭЛ ===== -->
+<section id="info">
+  <h2>Хиймэл оюуны тухай мэдээлэл</h2>
+  <p class="lead">Сэдвээ сонгоод шууд унших боломжтой.</p>
+  <div class="tabs" role="tablist">
+    <button class="on" data-t="0">Юу вэ?</button><button data-t="1">Түүх</button><button data-t="2">Төрөл</button><button data-t="3">Хэрхэн ажилладаг</button><button data-t="4">Давуу, сул тал</button><button data-t="5">Өдөр тутам</button><button data-t="6">Ирээдүй</button>
+  </div>
+  <div class="card">
+    <div class="pn" id="p0"><h3>Хиймэл оюун ухаан гэж юу вэ?</h3>
+      <p>Хиймэл оюун ухаан (Artificial Intelligence, AI) нь хүний оюун ухаанд хамаарах ажлуудыг — суралцах, үндэслэх, асуудал шийдэх, хэл ойлгох, дүрс таних — компьютерээр гүйцэтгүүлдэг шинжлэх ухаан, технологи юм. “Artificial Intelligence” нэр томьёог 1956 онд Жон Маккарти анх хэрэглэсэн.</p>
+      <p class="hi">💡 Гурван тулгуур: <b>өгөгдөл</b> + <b>алгоритм</b> + <b>тооцоолох хүчин чадал</b>.</p></div>
+    <div class="pn" id="p1" hidden><h3>Үүсэл, хөгжлийн түүх</h3>
+      <ul class="tl">
+        <li><b>1950</b>Алан Тьюринг “машин сэтгэж чадах уу?” гэж асууж, Тьюрингийн тестийг санал болгосон.</li>
+        <li><b>1956</b>Дартмутын чуулганаар AI шинжлэх ухааны салбар болон албан ёсоор төрсөн.</li>
+        <li><b>1997</b>IBM Deep Blue шатрын дэлхийн аварга Гарри Каспаровыг ялсан.</li>
+        <li><b>2012</b>Гүн сургалт (deep learning) дүрс таних өрсөлдөөнд шийдвэрлэх ялалт байгуулсан.</li>
+        <li><b>2016</b>AlphaGo го тоглоомын мастер Ли Седолыг ялсан.</li>
+        <li><b>2022</b>ChatGPT гарч, генератив AI олон нийтэд өргөн дэлгэрсэн.</li></ul></div>
+    <div class="pn" id="p2" hidden><h3>Төрөл, ангилал</h3>
+      <div class="g"><div><b>Явцуу AI (Narrow)</b><p class="mu">Нэг тодорхой ажил хийнэ. Өнөөдрийн бүх AI энэ төрөлд багтана.</p></div>
+      <div><b>Ерөнхий AI (AGI)</b><p class="mu">Хүн шиг ямар ч ажлыг сурч чадна. Одоогоор судалгааны шатанд байна.</p></div>
+      <div><b>Супер AI (ASI)</b><p class="mu">Хүнээс бүх талаараа илүү гэсэн таамаглал. Онолын түвшинд.</p></div></div>
+      <div class="chips"><span>Машин сургалт</span><span>Гүн сургалт</span><span>Хэл боловсруулалт (NLP)</span><span>Компьютер хараа</span><span>Робот техник</span></div></div>
+    <div class="pn" id="p3" hidden><h3>Хиймэл оюун хэрхэн ажилладаг вэ?</h3>
+      <div class="g"><div><div class="em">📥</div><b>1. Өгөгдөл цуглуулах</b><p class="mu">Зураг, текст, тоон өгөгдлийг цэвэрлэж бэлтгэнэ.</p></div>
+      <div><div class="em">🏋️</div><b>2. Загвар сургах</b><p class="mu">Алгоритм өгөгдлөөс дүрэм, хэв шинжийг өөрөө олно.</p></div>
+      <div><div class="em">🎯</div><b>3. Таамаглах</b><p class="mu">Шинэ өгөгдөлд сурсан мэдлэгээ хэрэглэж хариу өгнө.</p></div>
+      <div><div class="em">🔁</div><b>4. Үнэлж сайжруулах</b><p class="mu">Алдааг хэмжиж, загварыг дахин сургана.</p></div></div></div>
+    <div class="pn" id="p4" hidden><h3>Давуу тал ба сул тал</h3>
+      <div class="g"><div class="ok"><h3>✔ Давуу тал</h3><ul class="pc"><li>Хурдан, ядрахгүй ажиллана</li><li>Их өгөгдлөөс хэв шинж олно</li><li>Давтагдах ажлыг автоматжуулна</li><li>Хувь хүнд тохирсон үйлчилгээ үзүүлнэ</li></ul></div>
+      <div class="no"><h3>✘ Сул тал</h3><ul class="pc"><li>Их өгөгдөл, тооцоолол шаардана</li><li>Өгөгдлийн хэвийх байдал алдаа гаргана</li><li>Зарим ажлын байр өөрчлөгдөнө</li><li>Нууцлал, ёс зүйн эрсдэлтэй</li></ul></div></div></div>
+    <div class="pn" id="p5" hidden><h3>Өдөр тутмын амьдрал дахь хэрэглээ</h3>
+      <div class="g"><div><div class="em">📱</div><b>Дуут туслах</b><p class="mu">Утсанд хэлээд тушаал өгнө.</p></div>
+      <div><div class="em">🔐</div><b>Face ID</b><p class="mu">Царайгаар төхөөрөмж нээнэ.</p></div>
+      <div><div class="em">🌐</div><b>Орчуулга</b><p class="mu">Google Translate-ийн орчуулга.</p></div>
+      <div><div class="em">🎬</div><b>Зөвлөмж</b><p class="mu">YouTube, Netflix-ийн санал болгол.</p></div>
+      <div><div class="em">🗺️</div><b>Навигаци</b><p class="mu">Замын түгжрэлийг таамаглана.</p></div>
+      <div><div class="em">🏦</div><b>Банк</b><p class="mu">Залилангийн гүйлгээ илрүүлнэ.</p></div></div></div>
+    <div class="pn" id="p6" hidden><h3>Ирээдүйн хөгжил, боломж</h3>
+      <ul class="pc"><li><b>Эрүүл мэнд:</b> эмнэлзүйн зураг дээр өвчнийг эрт оношлох.</li><li><b>Ухаалаг хот:</b> тээвэр, эрчим хүчийг оновчтой удирдах.</li><li><b>Өөрөө жолооддог тээвэр:</b> ослыг бууруулах боломж.</li><li><b>Боловсрол:</b> суралцагч бүрт хувийн хөтөлбөр.</li><li><b>Ёс зүй, зохицуулалт:</b> AI-г аюулгүй, шударга хэрэглэх дүрэм журам.</li></ul></div>
+  </div>
+</section>
+
+<!-- ===== 4. ИНТЕРАКТИВ КАРТУУД ===== -->
+<section id="topics">
+  <h2>Гурван үндсэн сэдэв</h2>
+  <p class="lead">Карт бүрийн “Дэлгэрэнгүй үзэх” товчийг дарж тайлбар, кодын жишээг нээнэ үү.</p>
+  <div class="g" id="cards"></div>
+</section>
+
+<!-- ===== 5. КОДЫН ЖИШЭЭ ===== -->
+<section id="code">
+  <h2>Кодын жишээ</h2>
+  <p class="lead">“Тайлбар” товчоор мөр бүрийн утгыг, “Хуулах” товчоор кодыг хуулна.</p>
+  <div class="g" id="codes" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))"></div>
+</section>
+
+<!-- ===== 6. QR, GOOGLE SITES ===== -->
+<section id="share">
+  <h2>Хуваалцах</h2>
+  <p class="lead">Сайтын хаягаа оруулж QR код үүсгээд PNG-ээр татаж аваарай.</p>
+  <div class="card qrw">
+    <div id="qr"></div>
+    <div style="flex:1;min-width:240px">
+      <input id="qurl" aria-label="QR кодын хаяг" placeholder="https://sites.google.com/view/...">
+      <button class="btn" id="qgen">QR үүсгэх</button> <button class="btn o" id="qdl">PNG татах</button>
+      <p style="margin-top:14px"><a class="btn o" href="https://sites.google.com/" target="_blank" rel="noopener">Google Sites руу очих</a></p>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ===== 7. FOOTER ===== -->
+<footer><div class="w">
+  <p><b>Өвөрхангай аймаг дахь Политехник коллеж</b></p>
+  <p>Хичээл: Хиймэл оюуны үндэс</p>
+  <p>Сэдэв: Хиймэл оюуны тухай</p>
+  <p>Бие даалтын ажил</p>
+  <div class="au">Гүйцэтгэсэн: <b>Оюутны овог нэр</b> · Бүлэг: ______ · Хичээлийн багш: ______</div>
+</div></footer>
+<button class="ic btn" id="top" aria-label="Дээш буцах">↑</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+
+/* ---------- Light / Dark горим ---------- */
+const root=document.documentElement;
+function setTheme(t){root.dataset.theme=t;$('#theme').textContent=t==='dark'?'☀️':'🌙';try{localStorage.setItem('th',t)}catch(e){}}
+let saved=null;try{saved=localStorage.getItem('th')}catch(e){}
+setTheme(saved||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'));
+$('#theme').onclick=()=>setTheme(root.dataset.theme==='dark'?'light':'dark');
+
+/* ---------- Нүүр хэсгийн мэдрэлийн сүлжээний SVG ---------- */
+(function(){
+  const L=[3,5,5,2],W=420,H=340;
+  const P=L.map((n,i)=>Array.from({length:n},(_,j)=>[50+i*(W-100)/(L.length-1),H/2+(j-(n-1)/2)*58]));
+  let h='';
+  P.forEach((a,i)=>{if(i)P[i-1].forEach(p=>a.forEach(q=>h+=`<line x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}"/>`))});
+  P.forEach((a,i)=>a.forEach((p,j)=>h+=`<circle cx="${p[0]}" cy="${p[1]}" r="11" style="animation-delay:${(i*.5+j*.08).toFixed(2)}s"/>`));
+  $('#net').innerHTML=h;
+})();
+
+/* ---------- Табууд ---------- */
+$$('.tabs button').forEach(b=>b.onclick=()=>{
+  $$('.tabs button').forEach(x=>x.classList.toggle('on',x===b));
+  $$('.pn').forEach(p=>p.hidden=p.id!=='p'+b.dataset.t);
+});
+
+/* ---------- Синтакс тодруулга (Python) ---------- */
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const KW='def|return|if|elif|else|import|from|for|in|not|and|or|abs|True|False|None';
+function hl(s){
+  const re=new RegExp('("[^"]*"|\'[^\']*\')|(#.*$)|\\b('+KW+')\\b|\\b(print|sum|len)\\b|\\b(\\d+\\.?\\d*)\\b','g');
+  return esc(s).replace(re,(m,st,cm,kw,fn,nm)=>st?`<span class="s">${m}</span>`:cm?`<span class="c">${m}</span>`:kw?`<span class="k">${m}</span>`:fn?`<span class="f">${m}</span>`:`<span class="n">${m}</span>`);
+}
+/* Мөр бүр: "код ## тайлбар" хэлбэртэй */
+function block(src){
+  const L=src.split('\n').map(l=>{const a=l.split(' ## ');return{c:a[0],e:a[1]}});
+  const raw=L.map(l=>l.c).join('\n'),hasE=L.some(l=>l.e);
+  return `<div class="cb" data-code="${encodeURIComponent(raw)}"><div class="cbh"><span>Python</span><span>${hasE?'<button class="mini" data-ex>Тайлбар</button>':''}<button class="mini" data-copy>Хуулах</button></span></div>`+
+  `<pre><code>${L.map((l,i)=>`<span class="ln">${i+1}</span>${hl(l.c)}`).join('\n')}</code></pre>`+
+  (hasE?`<ol class="ex" hidden>${L.map((l,i)=>l.e?`<li value="${i+1}"><code>${i+1}-р мөр:</code> ${l.e}</li>`:'').join('')}</ol>`:'')+`</div>`;
+}
+
+/* ---------- Гурван карт ---------- */
+const cards=[
+{i:'🎓',t:'Мэргэжлийн боловсрол',s:'AI суралцагч бүрт тохирсон хичээл, дасгал санал болгодог.',
+ u:'Суралцагчийн түвшинг тодорхойлж хичээл санал болгох, даалгавар автоматаар шалгах, виртуал туслах багшаар ажиллуулах.',
+ b:'Өөрийн хурдаар суралцах, шууд санал хүлээн авах, багшийн тайлан, үнэлгээний ачаалал буурах.',
+ e:'Duolingo хэлний түвшинг дасгалаар тохируулдаг. Khan Academy-ийн Khanmigo туслах суралцагчид алхам алхмаар заадаг.',
+ c:`score = 62 ## Суралцагчийн шалгалтын оноо
+level = "суурь" if score < 70 else "ахисан" ## Оноогоор түвшин тодорхойлно
+print("Санал болгох хичээл:", level) ## Түвшинд тохирох хичээлийг хэвлэнэ`},
+{i:'⚙️',t:'Техникийн боловсрол',s:'Үйлдвэрлэл, автоматжуулалт, роботын салбарын гол хөдөлгүүр.',
+ u:'Чанарын хяналт (компьютер хараа), үйлдвэрийн автоматжуулалт, роботын удирдлага, тоног төхөөрөмжийн эвдрэлийг урьдчилан таамаглах.',
+ b:'Аюулгүй симуляцаар дадлагажих, алдаа, зогсолт, өртөг багасах, шинэ мэргэжлийн ур чадвар эзэмших.',
+ e:'Siemens үйлдвэрийн төхөөрөмжийн эвдрэлийг урьдчилан таамаглаж засвар хийдэг. Boston Dynamics-ийн Spot робот байгууламжийг шалгадаг.',
+ c:`temps = [71, 72, 70, 95, 71] ## Мотор дээрх температурын заалтууд
+avg = sum(temps) / len(temps) ## Дундаж температур
+bad = [t for t in temps if abs(t - avg) > 15] ## Дунджаас хэт зөрүүтэй заалтыг ялгана
+print("Эвдрэлийн дохио:", bad) ## [95] гэж хэвлэнэ`},
+{i:'💻',t:'Мэдээллийн технологи',s:'Программчлал, өгөгдөл боловсруулалт, машин сургалтын үндэс.',
+ u:'Код бичих туслах, алдаа илрүүлэх, өгөгдөл цэвэрлэх, машин сургалтын загвар сургах.',
+ b:'Хөгжүүлэлт хурдасна, давтагдах ажил автоматжина, шинэ программист хурдан суралцана.',
+ e:'GitHub Copilot код санал болгодог. Google Colab дээр scikit-learn, TensorFlow ашиглан загвар сургадаг.',
+ c:`import pandas as pd ## Өгөгдөл боловсруулах сан
+df = pd.DataFrame({"score": [55, 80, 92]}) ## Оноонуудаас хүснэгт үүсгэнэ
+print(df["score"].mean()) ## Дундаж оноог бодож хэвлэнэ`}];
+$('#cards').innerHTML=cards.map((c,n)=>`<article class="card"><div class="em">${c.i}</div><h3>${c.t}</h3><p class="mu">${c.s}</p>
+<button class="btn more" aria-expanded="false" aria-controls="a${n}">Дэлгэрэнгүй үзэх</button>
+<div class="acc" id="a${n}"><div><dl><dt>Хэрэглээ</dt><dd>${c.u}</dd><dt>Боломж, давуу тал</dt><dd>${c.b}</dd><dt>Бодит жишээ</dt><dd>${c.e}</dd></dl>${block(c.c)}</div></div></article>`).join('');
+
+/* ---------- Үндсэн кодын жишээнүүд ---------- */
+const ex1=`def chatbot(text): ## Мессеж авч хариу буцаах функц зарлана
+    text = text.lower() ## Том, жижиг үсгийн ялгааг арилгана
+    if "сайн" in text: ## Мессежид “сайн” гэсэн үг байгаа эсэхийг шалгана
+        return "Сайн байна уу!" ## Мэндчилгээний хариу буцаана
+    elif "хиймэл оюун" in text: ## Хиймэл оюуны тухай асуусан эсэхийг шалгана
+        return "Би дүрэмд суурилсан энгийн AI программ." ## Өөрийгөө танилцуулна
+    return "Уучлаарай, ойлгосонгүй." ## Дүрэм таарахгүй бол үндсэн хариу
+
+print(chatbot("Сайн уу")) ## Функцийг дуудаж хариуг хэвлэнэ`;
+const ex2=`from sklearn.tree import DecisionTreeClassifier ## Шийдвэрийн мод алгоритмыг импортлоно
+
+X = [[150, 40], [160, 55], [175, 80], [185, 95]] ## Оролт: [өндөр см, жин кг]
+y = ["S", "S", "L", "L"] ## Хариу: S - жижиг, L - том хэмжээ
+
+model = DecisionTreeClassifier() ## Хоосон загвар үүсгэнэ
+model.fit(X, y) ## Өгөгдөл дээр загварыг сургана
+
+print(model.predict([[170, 70]])) ## Шинэ өгөгдлийн ангиллыг таамаглана`;
+$('#codes').innerHTML=
+ `<div class="card"><h3>1. Python дээрх энгийн AI</h3><p class="mu">Дүрэмд суурилсан чатбот.</p>${block(ex1)}</div>`+
+ `<div class="card"><h3>2. Машин сургалтын үндсэн жишээ</h3><p class="mu">Өгөгдлөөс суралцаж таамаглана (<code>pip install scikit-learn</code>).</p>${block(ex2)}</div>`;
+
+/* ---------- Товчнууд: accordion, тайлбар, хуулах ---------- */
+async function copy(t){try{await navigator.clipboard.writeText(t)}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}}
+document.addEventListener('click',async e=>{
+  const m=e.target.closest('.more');
+  if(m){const a=$('#'+m.getAttribute('aria-controls')),o=a.classList.toggle('open');m.setAttribute('aria-expanded',o);m.textContent=o?'Хураах':'Дэлгэрэнгүй үзэх'}
+  const x=e.target.closest('[data-ex]');
+  if(x){const l=x.closest('.cb').querySelector('.ex');l.hidden=!l.hidden;x.textContent=l.hidden?'Тайлбар':'Тайлбар хураах'}
+  const c=e.target.closest('[data-copy]');
+  if(c){await copy(decodeURIComponent(c.closest('.cb').dataset.code));c.textContent='✓ Хуулагдлаа';setTimeout(()=>c.textContent='Хуулах',1500)}
+});
+
+/* ---------- QR код ---------- */
+const qi=$('#qurl');
+qi.value=location.protocol.startsWith('http')?location.href:'https://sites.google.com/';
+function mk(){
+  const b=$('#qr');b.innerHTML='';
+  if(typeof QRCode==='undefined'){b.textContent='QR сан ачаалагдсангүй. Интернэт холболтоо шалгана уу.';return}
+  new QRCode(b,{text:qi.value.trim()||location.href,width:200,height:200,correctLevel:QRCode.CorrectLevel.M});
+}
+$('#qgen').onclick=mk;
+$('#qdl').onclick=()=>{
+  const cv=$('#qr canvas');
+  if(!cv){alert('Эхлээд QR код үүсгэнэ үү.');return}
+  const o=document.createElement('canvas');o.width=o.height=cv.width+40;
+  const g=o.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,o.width,o.height);g.drawImage(cv,20,20);
+  const a=document.createElement('a');a.href=o.toDataURL('image/png');a.download='qr-code.png';a.click();
+};
+mk();
+
+/* ---------- Дээш буцах ---------- */
+const tp=$('#top');
+tp.onclick=()=>scrollTo({top:0,behavior:'smooth'});
+addEventListener('scroll',()=>tp.classList.toggle('show',scrollY>400),{passive:true});
+</script>
+</body>
+</html>
